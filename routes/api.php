@@ -6,6 +6,7 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/book', [BookController::class, 'index']);
-Route::get('/author', [AuthorController::class, 'index']);
-Route::get('/sale/{id}', [SaleController::class, 'index']);
-Route::get('/user/{id}', [UserController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('/book', [BookController::class, 'index']);
+    Route::get('/author', [AuthorController::class, 'index']);
+    Route::get('/sale/{id}', [SaleController::class, 'index']);
+    Route::get('/user/{id}', [UserController::class, 'show']);
+});
+
+
+Route::post('/sanctum/token', [AuthController::class, 'requestToken']);
